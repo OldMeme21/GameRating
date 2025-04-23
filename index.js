@@ -30,7 +30,7 @@ async function runExample() {
      x[22] = document.getElementById('sexual_content').value;
      x[23] = document.getElementById('sexual_themes').value;
      x[24] = document.getElementById('simulated_gambling').value;
-     x[25] = document.getElementById('strong_janguage').value;
+     x[25] = document.getElementById('strong_language').value;
      x[26] = document.getElementById('strong_sexual_content').value;
      x[27] = document.getElementById('suggestive_themes').value;
      x[28] = document.getElementById('use_of_alcohol').value;
