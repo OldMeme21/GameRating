@@ -1,7 +1,7 @@
 
 async function runExample() {
 
-    var x = new Float32Array( 1, 32 )
+    var x = new Float32Array( 1, 31 )
 
     var x = [];
 
@@ -38,11 +38,11 @@ async function runExample() {
      x[30] = document.getElementById('violence').value;
      
 
-    let tensorX = new onnx.Tensor(x, 'float32', [1, 32]);
+    let tensorX = new onnx.Tensor(x, 'float32', [1, 31]);
 
     let session = new onnx.InferenceSession();
 
-    await session.loadModel("./DLnet_WineData.onnx");
+    await session.loadModel("./DLnet_video_game.onnx");
     let outputMap = await session.run([tensorX]);
     let outputData = outputMap.get('output1');
 
