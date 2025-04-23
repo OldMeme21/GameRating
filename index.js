@@ -38,7 +38,7 @@ async function runExample() {
      x[30] = document.getElementById('violence').value;
      
 
-    let tensorX = new onnx.Tensor(x, 'float32', [1, 11]);
+    let tensorX = new onnx.Tensor(x, 'float32', [1, 32]);
 
     let session = new onnx.InferenceSession();
 
