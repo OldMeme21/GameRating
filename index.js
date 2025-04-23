@@ -24,7 +24,7 @@ async function runExample() {
 
   let floatArray = new Float32Array(x.map(v => parseFloat(v)));
   let tensorX = new ort.Tensor('float32', floatArray, [1, 31]); // or [1, 32] if needed
-  let session = await ort.InferenceSession.create('DLnet_video_game.onnx');
+  let session = await ort.InferenceSession.create('./DLnet_video_game.onnx');
 
 
   let outputMap = await session.run([tensorX]);
