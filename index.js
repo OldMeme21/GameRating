@@ -1,64 +1,42 @@
-
 async function runExample() {
+  let x = [];
 
-    var x = new Float32Array( 1, 31 )
+  const fieldIds = [
+      'console', 'alcohol_reference', 'animated_blood', 'blood', 'blood_and_gore',
+      'cartoon_violence', 'crude_humor', 'drug_reference', 'fantasy_violence', 'intense_violence',
+      'language', 'lyrics', 'mature_humor', 'mild_blood', 'mild_cartoon_violence',
+      'mild_fantasy_violence', 'mild_language', 'mild_lyrics', 'mild_suggestive_themes',
+      'mild_violence', 'no_descriptors', 'nudity', 'partial_nudity', 'sexual_content',
+      'sexual_themes', 'simulated_gambling', 'strong_janguage', 'strong_sexual_content',
+      'suggestive_themes', 'use_of_alcohol', 'use_of_drugs_and_alcohol', 'violence'
+  ];
 
-    var x = [];
+  for (let i = 0; i < 31; i++) {
+    const element = document.getElementById(fieldIds[i]);
+    if (!element) {
+      console.error(`Missing input with id: ${fieldIds[i]}`);
+      return;
+    }
+    const val = parseFloat(element.value);
+    x.push(val);
+  }
 
-     x[0] = document.getElementById('console').value;
-     x[1] = document.getElementById('alcohol_reference').value;
-     x[2] = document.getElementById('animated_blood').value;
-     x[3] = document.getElementById('blood').value;
-     x[4] = document.getElementById('blood_and_gore').value;
-     x[5] = document.getElementById('cartoon_violence').value;
-     x[6] = document.getElementById('crude_humor').value;
-     x[7] = document.getElementById('drug_reference').value;
-     x[8] = document.getElementById('fantasy_violence').value;
-     x[9] = document.getElementById('intense_violence').value;
-     x[10] = document.getElementById('language').value;
-     x[11] = document.getElementById('mature_humor').value;
-     x[12] = document.getElementById('mild_blood').value;
-     x[13] = document.getElementById('mild_cartoon_violence').value;
-     x[14] = document.getElementById('mild_fantasy_violence').value;
-     x[15] = document.getElementById('mild_language').value;
-     x[16] = document.getElementById('mild_lyrics').value;
-     x[17] = document.getElementById('mild_suggestive_themes').value;
-     x[18] = document.getElementById('mild_violence').value;
-     x[19] = document.getElementById('no_descriptors').value;
-     x[20] = document.getElementById('nudity').value;
-     x[21] = document.getElementById('partial_nudity').value;
-     x[22] = document.getElementById('sexual_content').value;
-     x[23] = document.getElementById('sexual_themes').value;
-     x[24] = document.getElementById('simulated_gambling').value;
-     x[25] = document.getElementById('strong_language').value;
-     x[26] = document.getElementById('strong_sexual_content').value;
-     x[27] = document.getElementById('suggestive_themes').value;
-     x[28] = document.getElementById('use_of_alcohol').value;
-     x[29] = document.getElementById('use_of_drugs_and_alcohol').value;
-     x[30] = document.getElementById('violence').value;
-
-    console.log("Collected input values:", x);
-    console.log("Input length:", x.length);
-     
-
-    let tensorX = new onnx.Tensor(x, 'float32', [1, 31]);
-
-    let session = new onnx.InferenceSession();
-
-    await session.loadModel("DLnet_video_game.onnx");
-    let outputMap = await session.run([tensorX]);
-    let outputData = outputMap.get('output1');
-
-   let predictions = document.getElementById('predictions');
-
-  predictions.innerHTML = ` <hr> Got an output tensor with values: <br/>
-   <table>
-     <tr>
-       <td>  Rating of Wine Quality  </td>
-       <td id="td0">  ${outputData.data[0].toFixed(2)}  </td>
-     </tr>
-  </table>`;
-    
+  let floatArray = new Float32Array(x.map(v => parseFloat(v)));
+  let tensorX = new ort.Tensor('float32', floatArray, [1, 31]); // or [1, 32] if needed
+  let session = await ort.InferenceSession.create('DLnet_video_game.onnx');
 
 
+  let outputMap = await session.run([tensorX]);
+  let outputData = outputMap.values().next().value;
+
+  let predictions = document.getElementById('predictions');
+  predictions.innerHTML = `
+      <hr>Got an output tensor with values:<br/>
+      <table>
+          <tr>
+              <td>Rating of Wine Quality</td>
+              <td>${outputData.data[0].toFixed(2)}</td>
+          </tr>
+      </table>
+  `;
 }
