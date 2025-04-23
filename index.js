@@ -36,6 +36,9 @@ async function runExample() {
      x[28] = document.getElementById('use_of_alcohol').value;
      x[29] = document.getElementById('use_of_drugs_and_alcohol').value;
      x[30] = document.getElementById('violence').value;
+
+    console.log("Collected input values:", x);
+    console.log("Input length:", x.length);
      
 
     let tensorX = new onnx.Tensor(x, 'float32', [1, 31]);
